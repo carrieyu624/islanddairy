@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>岛屿日记</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f1c1e;
+            --surface: #162a2d;
+            --surface-hover: #1d3539;
+            --border: #234044;
+            --text: #c8e6e9;
+            --text-dim: #6b9fa3;
+            --accent: #2dd4bf;
+            --accent-soft: #14b8a6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Serif SC', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 80px 24px 120px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        header h1 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        header .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            letter-spacing: 0.08em;
+            font-weight: 300;
+        }
+
+        .timeline {
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, var(--border), transparent);
+        }
+
+        .entry {
+            position: relative;
+            padding-left: 32px;
+            padding-bottom: 48px;
+            animation: fadeIn 0.6s ease-out both;
+        }
+
+        .entry:last-child {
+            padding-bottom: 0;
+        }
+
+        .entry::before {
+            content: '';
+            position: absolute;
+            left: -3px;
+            top: 8px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 0 4px var(--bg), 0 0 0 5px var(--border);
+        }
+
+        .entry-time {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+            font-variant-numeric: tabular-nums;
+            font-family: 'Inter', monospace;
+        }
+
+        .entry-body {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px 24px;
+            font-size: 0.95rem;
+            line-height: 1.85;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .entry-body:hover {
+            background: var(--surface-hover);
+            border-color: var(--accent-soft);
+            transform: translateX(4px);
+        }
+
+        .entry-body p {
+            margin: 0;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        footer p {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            letter-spacing: 0.1em;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 48px 20px 80px;
+            }
+
+            header h1 {
+                font-size: 1.6rem;
+            }
+
+            .entry-body {
+                padding: 16px 18px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>岛屿日记</h1>
+            <p class="subtitle">一座独自漂浮的、微小的记录之岛</p>
+        </header>
+
+        <main class="timeline" id="timeline"></main>
+
+        <footer>
+            <p>—— 持续更新中 ——</p>
+        </footer>
+    </div>
+
+    <script>
+        const entries = [
+            {
+                time: "2026/05/14 13:58:00",
+                content: "许愿：在结束这段估值职业旅程后去咖啡店打工吧。今天在Grid喝了一杯咸奶酪，读了几页他们的杂志，随着想象，内心竟澎湃了起来哈哈哈~"
+            }
+        ];
+
+        const timeline = document.getElementById('timeline');
+
+        entries.forEach((entry, index) => {
+            const article = document.createElement('article');
+            article.className = 'entry';
+            article.style.animationDelay = `${index * 0.1}s`;
+
+            article.innerHTML = `
+                <div class="entry-time">${entry.time}</div>
+                <div class="entry-body"><p>${escapeHtml(entry.content)}</p></div>
+            `;
+
+            timeline.appendChild(article);
+        });
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
